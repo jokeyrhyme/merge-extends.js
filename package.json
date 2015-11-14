@@ -1,5 +1,5 @@
 {
-  "name": "merge-extends.js",
+  "name": "merge-extends",
   "description": "walk the extend(s) property of an object, returning a single merged object",
   "version": "1.0.0",
   "author": "\"Ron Waldon\" (https://jokeyrhyme.github.io/)",
