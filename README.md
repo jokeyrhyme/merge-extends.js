@@ -1,2 +1,3 @@
 # merge-extends.js
-walk the extend(s) property of object(s), returning a single merged object
+
+walk the extend(s) property of an object, returning a single merged object
