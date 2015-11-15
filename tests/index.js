@@ -16,8 +16,10 @@ objects.set('def', { def: 456 });
 objects.set('ghi', { ghi: 789, extend: 'def' });
 objects.set('jki', { jki: 1012, extends: ['abc', 'ghi'] });
 
-const getter = (id) => {
-  return objects.get(id);
+const getter = (id) => objects.get(id);
+
+const concatArrays = (targetValue, sourceValue) => {
+  return Array.isArray(targetValue) ? targetValue.concat(sourceValue) : sourceValue;
 };
 
 let objectsMerger;
@@ -57,5 +59,14 @@ test('use the same getter', (t) => {
 
 test('support an array of extends', (t) => {
   t.same(objectsMerger('jki'), { abc: 123, def: 456, ghi: 789, jki: 1012 });
+  t.end();
+});
+
+test('optional customiser', (t) => {
+  const myMerger = merger(getter, concatArrays);
+  objects.set('birds', { names: [ 'canary' ] });
+  objects.set('fish', { names: [ 'sardine' ] });
+  objects.set('fauna', { extends: [ 'birds', 'fish' ] });
+  t.same(myMerger('fauna'), { names: [ 'canary', 'sardine' ] });
   t.end();
 });

@@ -14,9 +14,7 @@ import { mergeExtends, merger } from 'merge-extends';
 
 const objects = new Map();
 
-const getter = (id) => {
-  return objects.get(id);
-};
+const getter = (id) => objects.get(id);
 
 // you can just pass an identifier if you like
 objects.set('abc', { abc: 123 });
@@ -34,20 +32,36 @@ objectsMerger('ghi'); // { def: 456, ghi: 789 }
 // we also support an array of extends
 objects.set('jki', { jki: 1012, extends: ['abc', 'ghi'] });
 objectsMerger('jki'); // { abc: 123, def: 456, ghi: 789, jki: 1012 }
+
+// an optional customiser can be used to implement deep merging
+const concatArrays = (targetValue, sourceValue) => {
+  return Array.isArray(targetValue) ? targetValue.concat(sourceValue) : sourceValue;
+};
+const customObjectsMerger = merger(getter, concatArrays);
+objects.set('birds', { names: [ 'canary' ] });
+objects.set('fish', { names: [ 'sardine' ] });
+objects.set('fauna', { extends: [ 'birds', 'fish' ] });
+customObjectsMerger('fauna'); // { names: [ 'canary', 'sardine' ] }
 ```
 
 
 ### API
 
 
-#### `mergeExtends(source, getter)`
+#### `mergeExtends(source, getter, customiser)`
 
 - @param {Object|String} source
 - @param {Function} getter
+- @param {Function} [customiser]
 - @returns {Object}
 
+Like [lodash.assign()](https://lodash.com/docs#assign),
+we invoke the optional `customiser` function with five arguments:
+(targetValue, sourceValue, key, target, source).
 
-#### `merger(getter)`
+
+#### `merger(getter, customiser)`
 
 - @param {Function} getter
+- @param {Function} [customiser]
 - @returns {Function}

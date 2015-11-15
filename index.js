@@ -1,8 +1,12 @@
 'use strict';
 
+function defaultCustomiser (targetValue, sourceValue, key, target, source) {
+  return sourceValue;
+}
+
 // a customised version of Object.assign() poly-fill
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
-function assignWithoutExtends (target) {
+function assignWithoutExtends (customiser, target) {
   'use strict';
   var to, i, nextSource, keysArray, nextIndex, len, nextKey, desc;
   if (typeof target === 'undefined' || target === null) {
@@ -10,7 +14,7 @@ function assignWithoutExtends (target) {
   }
 
   to = Object(target);
-  for (i = 1; i < arguments.length; i += 1) {
+  for (i = 2; i < arguments.length; i += 1) {
     nextSource = arguments[i];
     if (typeof nextSource === 'undefined' || nextSource === null) {
       continue;
@@ -25,7 +29,7 @@ function assignWithoutExtends (target) {
       }
       desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
       if (typeof desc !== 'undefined' && desc.enumerable) {
-        to[nextKey] = nextSource[nextKey];
+        to[nextKey] = customiser(to[nextKey], nextSource[nextKey], nextKey, to, nextSource);
       }
     }
   }
@@ -35,10 +39,11 @@ function assignWithoutExtends (target) {
 /*
 @param {Object|String} source
 @param {Function} getter
+@param {Function} [customiser]
 @returns {Object}
 */
-module.exports.mergeExtends = function mergeExtends (source, getter) {
-  var srcObj, sources, extendz;
+module.exports.mergeExtends = function mergeExtends (source, getter, customiser) {
+  var customFn, srcObj, sources, extendz;
 
   // use the getter to dereference a sourceId
   if (typeof source === 'string') {
@@ -58,20 +63,23 @@ module.exports.mergeExtends = function mergeExtends (source, getter) {
     return srcObj;
   }
 
+  customFn = customiser || defaultCustomiser;
+
   // get all source objects
   sources = extendz.map(function (ex) {
-    return mergeExtends(getter(ex), getter);
+    return mergeExtends(getter(ex), getter, customFn);
   });
 
-  return assignWithoutExtends.apply(null, [ {}, srcObj ].concat(sources));
+  return assignWithoutExtends.apply(null, [ customFn, {}, srcObj ].concat(sources));
 };
 
 /*
 @param {Function} getter
+@param {Function} [customiser]
 @returns {Function}
 */
-module.exports.merger = function merger (getter) {
+module.exports.merger = function merger (getter, customiser) {
   return function (source) {
-    return module.exports.mergeExtends(source, getter);
+    return module.exports.mergeExtends(source, getter, customiser);
   };
 };
