@@ -7,15 +7,23 @@
     "url": "https://github.com/jokeyrhyme/merge-extends.js/issues"
   },
   "devDependencies": {
-    "@jokeyrhyme/eslint-config-es2015": "^1.0.0",
-    "@jokeyrhyme/eslint-config-es5": "^1.0.0",
     "ava": "^0.17.0",
     "eslint": "^3.12.2",
     "eslint-config-semistandard": "^7.0.0",
     "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-node": "^3.0.5",
+    "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
     "fixpack": "^2.2.0",
+    "flow-bin": "^0.37.0",
     "nyc": "^10.0.0"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "engines": {
+    "node": ">=0.12",
+    "npm": ">=2"
   },
   "homepage": "https://github.com/jokeyrhyme/merge-extends.js#readme",
   "keywords": [],
@@ -26,10 +34,12 @@
     "url": "git+https://github.com/jokeyrhyme/merge-extends.js.git"
   },
   "scripts": {
-    "eslint": "eslint --fix .",
+    "ava": "nyc ava",
+    "eslint": "eslint --fix --cache .",
     "fixpack": "fixpack",
-    "nyc": "nyc check-coverage -f 90 -l 90 -s 90",
-    "posttest": "npm run nyc && npm run eslint && npm run fixpack",
-    "test": "nyc ava tests/**/*.js"
+    "flow_check": "flow check",
+    "nyc": "nyc check-coverage",
+    "posttest": "npm run eslint && npm run flow_check && npm run fixpack",
+    "test": "npm run ava && npm run nyc"
   }
 }

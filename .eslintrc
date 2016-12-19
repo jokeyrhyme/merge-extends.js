@@ -1,4 +1,0 @@
-{
-  "extends": ["@jokeyrhyme/es5"],
-  "root": true
-}
