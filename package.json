@@ -6,11 +6,11 @@
   "bugs": {
     "url": "https://github.com/jokeyrhyme/merge-extends.js/issues"
   },
+  "dependencies": {},
   "devDependencies": {
     "ava": "^0.18.0",
     "eslint": "^3.12.2",
-    "eslint-config-semistandard": "^8.0.0",
-    "eslint-config-standard": "^6.2.1",
+    "eslint-config-standard": "^7.0.2",
     "eslint-plugin-node": "^4.0.0",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
@@ -19,7 +19,7 @@
     "nyc": "^10.0.0"
   },
   "directories": {
-    "test": "tests"
+    "test": "test"
   },
   "engines": {
     "node": ">=4",

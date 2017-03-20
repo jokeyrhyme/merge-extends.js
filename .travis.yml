@@ -2,6 +2,7 @@ language: node_js
 node_js:
   - '4'
   - '6'
+  - '7'
 sudo: false
 env:
   global:
@@ -12,12 +13,7 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
-cache:
-  directories:
-    - node_modules
 install:
   - npm install --global npm
-  - npm install --global flow-typed
-  - npm install --global typings
   - npm install --global yarn
   - npm install
